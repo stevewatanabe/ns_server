@@ -606,6 +606,7 @@ delete_unused_buckets_db_files() ->
         case lists:member(kv, Services) of
             true ->
                 ns_bucket:node_bucket_names_of_type(node(), membase, couchstore, BCfgs)
+                    ++ ns_bucket:node_bucket_names_of_type(node(), membase, magma, BCfgs)
                     ++ ns_bucket:node_bucket_names_of_type(node(), membase, ephemeral, BCfgs);
             false ->
                 case ns_cluster_membership:get_cluster_membership(node(), Config) of
