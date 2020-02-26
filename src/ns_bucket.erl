@@ -47,6 +47,7 @@
          get_buckets/0,
          get_buckets/1,
          is_named_bucket_persistent/1,
+         is_named_bucket_auto_compactable/1,
          is_persistent/1,
          is_valid_bucket_name/1,
          json_map_from_config/2,
@@ -742,6 +743,14 @@ is_persistent(BucketConfig) ->
     bucket_type(BucketConfig) =:= membase andalso
         (storage_mode(BucketConfig) =:= couchstore orelse
          storage_mode(BucketConfig) =:= magma).
+
+is_named_bucket_auto_compactable(BucketName) ->
+    {ok, BucketConfig} = get_bucket(BucketName),
+    is_auto_compactable(BucketConfig).
+
+is_auto_compactable(BucketConfig) ->
+    is_persistent(BucketConfig) andalso
+    storage_mode(BucketConfig) =/= magma.
 
 names_conflict(BucketNameA, BucketNameB) ->
     string:to_lower(BucketNameA) =:= string:to_lower(BucketNameB).
